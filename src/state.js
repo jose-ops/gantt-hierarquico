@@ -32,6 +32,9 @@ function loadTasks() {
 }
 function saveTasks() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks)); } catch (e) { } }
 
+let idSeq = 1;
+function genId() { return "n" + (idSeq++) + Date.now().toString(36); }
+
 const _hoje = new Date(); _hoje.setHours(0, 0, 0, 0);
 const rel = (offset) => toISO(addDays(_hoje, offset));
 
@@ -102,7 +105,7 @@ function descendants(id) {
 
 let effective = {};
 let progressMap = {};
-function computeProgress(node) {
+function computeProgress(node) { // Calcula progresso de grupo como média dos filhos
   if (progressMap[node.id] != null) return progressMap[node.id];
   const kids = childrenMap[node.id] || [];
   if (!kids.length) { const p = Math.max(0, Math.min(100, Number(node.progress) || 0)); progressMap[node.id] = p; return p; }
@@ -110,7 +113,7 @@ function computeProgress(node) {
   const p = Math.round(vals.reduce((a, b) => a + b, 0) / vals.length);
   progressMap[node.id] = p; return p;
 }
-function computeEffective(node) {
+function computeEffective(node) { // Calcula datas efetivas de grupo como min/max dos filhos
   if (effective[node.id]) return effective[node.id];
   const kids = childrenMap[node.id];
   if (!kids || kids.length === 0) { const e = { start: parseDate(node.startDate), end: parseDate(node.endDate), isGroup: false }; effective[node.id] = e; return e; }
@@ -118,7 +121,7 @@ function computeEffective(node) {
   kids.forEach(k => { const ke = computeEffective(k); if (!min || ke.start < min) min = ke.start; if (!max || ke.end > max) max = ke.end; });
   const e = { start: min, end: max, isGroup: true }; effective[node.id] = e; return e;
 }
-function getRange() {
+function getRange() { // Retorna intervalo de datas a exibir na timeline, baseado em tarefas
   const today = new Date(); today.setHours(0, 0, 0, 0);
   // Janela fixa: 3 meses antes e 3 meses depois de hoje
   let min = addMonths(today, -3);

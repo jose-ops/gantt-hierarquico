@@ -11,7 +11,9 @@ function renderSidebar(visible) {
         <button class="tw-toggle ${isGroup ? "" : "leaf"}" aria-expanded="${isGroup ? expanded : "false"}"
           aria-label="${isGroup ? (expanded ? "Colapsar" : "Expandir") + " " + escapeHtml(node.name) : ""}"
           data-toggle="${node.id}">${isGroup ? (expanded ? "▾" : "▸") : ""}</button>
+        <button class="tw-add" data-add="${node.id}" title="Adicionar em ${escapeHtml(node.name)}" aria-label="Adicionar em ${escapeHtml(node.name)}">+</button>
         <span class="tw-label"><span class="tw-name">${escapeHtml(node.name)}</span>${owner}</span>
+        ${isGroup ? "" : `<button class="tw-edit" data-edit="${node.id}" title="Editar ${escapeHtml(node.name)}" aria-label="Editar ${escapeHtml(node.name)}">✎</button>`}
         ${meta}
       </div>`;
   }).join("");

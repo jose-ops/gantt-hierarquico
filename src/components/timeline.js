@@ -7,12 +7,14 @@ function renderTimeline(visible, cols) {
   els.body.querySelectorAll(".tl-row").forEach(n => n.remove());
   const frag = document.createDocumentFragment();
   visible.forEach(({ node, isGroup }) => {
-    const eff = effective[node.id];
+    const eff = effective[node.id] || {};
+    const effStart = (eff.start && !isNaN(eff.start)) ? eff.start : cols.min;
+    const effEnd = (eff.end && !isNaN(eff.end)) ? eff.end : addDays(cols.min, 7);
     const row = document.createElement("div");
     row.className = "tl-row"; row.dataset.id = node.id;
 
-    const left = dayDiff(eff.start, cols.min) * cols.pxPerDay;
-    const w = (dayDiff(eff.end, eff.start) + 1) * cols.pxPerDay;
+    const left = dayDiff(effStart, cols.min) * cols.pxPerDay;
+    const w = (dayDiff(effEnd, effStart) + 1) * cols.pxPerDay;
 
     const bar = document.createElement("div");
     bar.className = "bar" + (isGroup ? " summary" : "");
@@ -26,8 +28,8 @@ function renderTimeline(visible, cols) {
     const stLabel = statusIndicators[node.status || "pendente"].label;
     bar.setAttribute("aria-label",
       isGroup
-        ? `${node.name}, grupo com ${childrenMap[node.id].length} ações, de ${fmtPT(eff.start)} a ${fmtPT(eff.end)}. Arraste para mover.`
-        : `${node.name}, responsável ${node.owner || "—"}, de ${fmtPT(eff.start)} a ${fmtPT(eff.end)}, status: ${stLabel}. Arraste para mover ou redimensione pelas bordas.`);
+        ? `${node.name}, grupo com ${(childrenMap[node.id] || []).length} ações, de ${fmtPT(effStart)} a ${fmtPT(effEnd)}. Arraste para mover.`
+        : `${node.name}, responsável ${node.owner || "—"}, de ${fmtPT(effStart)} a ${fmtPT(effEnd)}, status: ${stLabel}. Arraste para mover ou redimensione pelas bordas.`);
     const handles = isGroup ? "" :
       `<span class="bar-handle left" data-side="left" aria-hidden="true"></span><span class="bar-handle right" data-side="right" aria-hidden="true"></span>`;
     const pct = computeProgress(node);

@@ -11,7 +11,8 @@ const statusIndicators = {
 const categoryLabels = {
   comercial: "Comercial", onboarding: "Onboarding", suporte: "Suporte", group: "Grupo"
 };
-const avatarPalette = ["#0052cc", "#1d9e75", "#d85a30", "#6554c0", "#ff8b00", "#de350b", "#00857a", "#8777d9", "#42526e"];
+
+const avatarPalette =  ["#0052cc", "#1d9e75", "#d85a30", "#6554c0", "#ff8b00", "#de350b", "#00857a", "#8777d9", "#42526e"];
 
 function avatarColor(name) { let h = 0; for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) >>> 0; return avatarPalette[h % avatarPalette.length]; }
 function initials(name) { const p = String(name).trim().split(/\s+/); return ((p[0]?.[0] || "") + (p[1]?.[0] || "")).toUpperCase(); }

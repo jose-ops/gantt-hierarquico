@@ -105,6 +105,7 @@ function descendants(id) {
 
 let effective = {};
 let progressMap = {};
+let statusMap = {};
 function computeProgress(node) { // Calcula progresso de grupo como média dos filhos
   if (progressMap[node.id] != null) return progressMap[node.id];
   const kids = childrenMap[node.id] || [];
@@ -121,9 +122,34 @@ function computeEffective(node) { // Calcula datas efetivas de grupo como min/ma
   kids.forEach(k => { const ke = computeEffective(k); if (!min || ke.start < min) min = ke.start; if (!max || ke.end > max) max = ke.end; });
   const e = { start: min, end: max, isGroup: true }; effective[node.id] = e; return e;
 }
+/* Status de grupo (roll-up) — regra por prioridade:
+   1) se QUALQUER descendente estiver "atrasado"     -> atrasado
+   2) senão, se TODOS estiverem "concluido"          -> concluido
+   3) senão (há algo não-concluído e nada atrasado)  -> em_andamento
+   Folha (sem filhos) mantém o próprio status (syncTask). */
+function computeStatus(node) {
+  if (statusMap[node.id] != null) return statusMap[node.id];
+  const kids = childrenMap[node.id] || [];
+  let s;
+  if (!kids.length) s = node.status || "pendente";
+  else {
+    let hasAtrasado = false, hasConcluido = false, hasOpen = false;
+    kids.forEach(k => {
+      const cs = computeStatus(k);
+      if (cs === "atrasado") hasAtrasado = true;
+      else if (cs === "concluido") hasConcluido = true;
+      else hasOpen = true; // em_andamento ou pendente
+    });
+    if (hasAtrasado) s = "atrasado";
+    else if (hasConcluido && !hasOpen) s = "concluido";
+    else s = "em_andamento";
+  }
+  statusMap[node.id] = s;
+  return s;
+}
 function getRange() { // Retorna intervalo de datas a exibir na timeline, baseado em tarefas
   const today = new Date(); today.setHours(0, 0, 0, 0);
-  // Janela fixa: 3 meses antes e 3 meses depois de hoje
+  // Janela fixa: 3 meses antes e 3 meses depois de hoje (validar depois) *****************
   let min = addMonths(today, -3);
   let max = addMonths(today, 3);
   // Não corta tarefas que fujam desse intervalo

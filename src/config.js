@@ -2,17 +2,17 @@
 const categoryColors = {
   comercial: "#378ADD", onboarding: "#1D9E75", suporte: "#D85A30", group: "#6B7280"
 };
-const statusIndicators = {
+const statusIndicators = { 
   concluido: { icon: "✓", label: "Concluído", color: "#10c419" },
   em_andamento: { icon: "▶", label: "Em andamento", color: "#3486d3" },
   atrasado: { icon: "!", label: "Atrasado", color: "#d30e0e" },
   pendente: { icon: "•", label: "Pendente", color: "#d8701b" }
 };
-const categoryLabels = {
+const categoryLabels = { 
   comercial: "Comercial", onboarding: "Onboarding", suporte: "Suporte", group: "Grupo"
 };
 
-const avatarPalette =  ["#0052cc", "#1d9e75", "#d85a30", "#6554c0", "#ff8b00", "#de350b", "#00857a", "#8777d9", "#42526e"];
+const avatarPalette =  ["#0052cc", "#1d9e75", "#d85a30", "#6554c0", "#ff8b00", "#de350b", "#00857a", "#8777d9", "#42526e", "#0052cc", "#1d9e75", "#d85a30", "#6554c0", "#ff8b00", "#de350b", "#00857a", "#8777d9", "#42526e"];
 
 function avatarColor(name) { let h = 0; for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) >>> 0; return avatarPalette[h % avatarPalette.length]; }
 function initials(name) { const p = String(name).trim().split(/\s+/); return ((p[0]?.[0] || "") + (p[1]?.[0] || "")).toUpperCase(); }
@@ -33,8 +33,8 @@ function avatarHTML(list) {
   return `<span class="avatar-stack">${html}</span>`;
 }
 
-function statusBadge(node) {
-  const s = statusIndicators[node.status || "pendente"];
+function statusBadge(node, status) {
+  const s = statusIndicators[status || node.status || "pendente"];
   return `<span class="status-badge" style="color:${s.color};background:color-mix(in srgb, ${s.color} 16%, transparent)"><span class="dot"></span>${s.label}</span>`;
 }
 

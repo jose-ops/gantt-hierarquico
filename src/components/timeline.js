@@ -21,11 +21,11 @@ function renderTimeline(visible, cols) {
     bar.style.left = left + "px";
     bar.style.width = Math.max(w, 12) + "px";
     if (!isGroup) bar.style.background = categoryColors[node.category];
-    bar.dataset.status = node.status || "pendente";
+    bar.dataset.status = statusMap[node.id] || "pendente";
     bar.dataset.id = node.id;
     bar.tabIndex = 0;
     bar.setAttribute("role", "button");
-    const stLabel = statusIndicators[node.status || "pendente"].label;
+    const stLabel = statusIndicators[statusMap[node.id] || "pendente"].label;
     bar.setAttribute("aria-label",
       isGroup
         ? `${node.name}, grupo com ${(childrenMap[node.id] || []).length} ações, de ${fmtPT(effStart)} a ${fmtPT(effEnd)}. Arraste para mover.`
@@ -40,7 +40,7 @@ function renderTimeline(visible, cols) {
         : `<span class="bar-avatar" title="${escapeHtml(primary.name)}" style="background-color:${avatarColor(primary.name)}">${initials(primary.name)}</span>`)
       : "";
     bar.innerHTML = `<span class="bar-fill" style="width:${pct}%"></span>` +
-                    (isGroup ? "" : `<span class="bar-status-ico">${statusIndicators[node.status].icon}</span>`) +
+                    `<span class="bar-status-ico">${statusIndicators[statusMap[node.id] || "pendente"].icon}</span>` +
                     `<span class="bar-label">${escapeHtml(node.name)}</span>` +
                     `<span class="bar-pct">${pct}%</span>${av}` + handles;
 

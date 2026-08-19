@@ -20,6 +20,7 @@ function onBarPointerDown(e, bar, node, isGroup, eff) {
   bar.classList.add("dragging");
   e.preventDefault();
   e.stopPropagation();
+  hideTooltip();
 }
 
 function onPointerMove(e) {
@@ -93,7 +94,8 @@ function initPan() {
     pan.startX = e.clientX;
     pan.startScroll = els.wrapper.scrollLeft;
     els.wrapper.classList.add("panning");
-    try { els.wrapper.setPointerCapture(e.pointerId); } catch (_) {}
+    hideTooltip();
+    try { els.wrapper.setPointerCapture(e.pointerId); } catch (_) { }
   });
 }
 function endPan(e) {
@@ -107,13 +109,13 @@ function initZoom() {
     if (!(e.ctrlKey || e.metaKey)) return;
     e.preventDefault();
     // Ancora o zoom na "data de hoje" (mantém hoje fixo na tela durante o zoom)
-    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const today = new Date(); today.setHours(0, 0, 0, 0); 
     const todayOffset = dayDiff(today, currentCols.min) * currentCols.pxPerDay;
     const todayScreenX = todayOffset - els.wrapper.scrollLeft;
-    const factor = e.deltaY < 0 ? 1.15 : 1 / 1.15;
+    const factor = e.deltaY < 0 ? 1.15 : 1 / 1.15; 
     zoom = Math.min(4, Math.max(0.3, zoom * factor));
     renderAll();
-    const newTodayOffset = dayDiff(today, currentCols.min) * currentCols.pxPerDay;
+    const newTodayOffset = dayDiff(today, currentCols.min) * currentCols.pxPerDay; 
     els.wrapper.scrollLeft = newTodayOffset - todayScreenX;
   }, { passive: false });
 }

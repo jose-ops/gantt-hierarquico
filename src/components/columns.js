@@ -1,21 +1,21 @@
 /* Componente: colunas da timeline por escala */
-function buildColumns() {
+function buildColumns() { // Retorna objeto com colunas, total de dias, largura em px e px por dia
   const { min, max } = getRange();
   const pxPerDay = PX_PER_DAY[scale] * zoom;
   const totalDays = dayDiff(max, min) + 1;
   const columns = [];
 
-  if (scale === "day" || scale === "data") {
+  if (scale === "day" || scale === "data") { // Escala diária ou por data: uma coluna por dia
     const fmt = scale === "data" ? fmtFull : fmtLabel;
     for (let i = 0; i < totalDays; i++) columns.push({ label: fmt(addDays(min, i)), days: 1 });
-  } else if (scale === "week") {
+  } else if (scale === "week") { // Escala semanal: uma coluna por semana, com label da semana
     let cur = new Date(min);
     while (dayDiff(cur, min) < totalDays) {
       const remaining = totalDays - dayDiff(cur, min);
       columns.push({ label: weekLabel(cur), days: Math.min(7, remaining) });
       cur = addDays(cur, 7);
     }
-  } else {
+  } else { // Escala mensal: uma coluna por mês, com label do mês
     let y = min.getFullYear(), m = min.getMonth();
     const endY = max.getFullYear(), endM = max.getMonth();
     while (y < endY || (y === endY && m <= endM)) {

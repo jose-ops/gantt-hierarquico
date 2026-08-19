@@ -6,7 +6,9 @@ function renderAll() {
     : roots;
   effective = {};
   progressMap = {};
+  statusMap = {};
   tasks.forEach(t => computeEffective(t));
+  tasks.forEach(t => computeStatus(t));
   const cols = buildColumns();
   const visible = computeVisible(activeRoots);
 

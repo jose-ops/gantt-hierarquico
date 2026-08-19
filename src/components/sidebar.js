@@ -4,7 +4,7 @@ function renderSidebar(visible) {
     const expanded = !collapsed.has(node.id);
     const owner = (!isGroup && node.owner) ? `<span class="tw-owner">${escapeHtml(node.owner)}</span>` : "";
     const assigns = nodeAssignees(node, isGroup);
-    const badge = isGroup ? "" : statusBadge(node);
+    const badge = statusBadge("", statusMap[node.id]);
     const meta = `<span class="tw-meta">${badge}${avatarHTML(assigns)}</span>`;
     return `
       <div class="tree-row ${isGroup ? "is-group" : ""}" data-id="${node.id}" style="padding-left:${depth * 16 + 8}px">

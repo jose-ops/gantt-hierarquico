@@ -1,0 +1,14 @@
+# OS / editor junk
+.DS_Store
+Thumbs.db
+*.log
+
+# IDE / editor
+.vscode/
+.idea/
+*.swp
+
+# Environment / local
+.env
+.env.*
+*.local

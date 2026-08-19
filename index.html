@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="auto">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ata Reunião — Clientes</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <section class="gantt-container" role="img"
+    aria-label="Cronograma hierárquico de ações de clientes agrupadas por cliente e fase">
+
+    <header class="gantt-header">
+      <h2 class="gantt-title">Cronograma estilo hierárquico - Ações por cliente</h2>
+
+      <div class="gantt-controls">
+        <fieldset class="gantt-filters" aria-label="Filtros do cronograma">
+          <legend class="sr-only">Filtros</legend>
+          <label class="filter-group">
+            <span>Categoria</span>
+            <select id="filter-category" aria-label="Filtrar por categoria">
+              <option value="all">Todas</option>
+              <option value="comercial">Comercial</option>
+              <option value="onboarding">Onboarding</option>
+              <option value="suporte">Suporte</option>
+            </select>
+          </label>
+          <label class="filter-group">
+            <span>Status</span>
+            <select id="filter-status" aria-label="Filtrar por status">
+              <option value="all">Todos</option>
+              <option value="concluido">Concluído</option>
+              <option value="em_andamento">Em andamento</option>
+              <option value="atrasado">Atrasado</option>
+              <option value="pendente">Pendente</option>
+            </select>
+          </label>
+        </fieldset>
+
+        <div class="gantt-tree-actions">
+          <button type="button" id="expand-all">Expandir tudo</button>
+          <button type="button" id="collapse-all">Colapsar tudo</button>
+        </div>
+
+        <button type="button" id="diaAtual" class="theme-toggle"
+          aria-label="Centralizar a visualização no dia atual">Hoje</button>
+
+        <button type="button" id="theme-toggle" class="theme-toggle"
+          aria-label="Alternar tema claro/escuro">Tema</button>
+
+        <button type="button" id="reset-data" class="theme-toggle"
+          aria-label="Restaurar dados de exemplo">Resetar</button>
+      </div>
+    </header>
+
+    <div class="gantt-scale" role="group" aria-label="Escala de tempo">
+      <button type="button" class="scale-toggle" aria-label="Recolher barra de datas">‹</button>
+      <button type="button" data-scale="day" class="scale-btn" aria-pressed="false">Dia</button>
+      <button type="button" data-scale="data" class="scale-btn" aria-pressed="false">Data</button>
+      <button type="button" data-scale="week" class="scale-btn is-active" aria-pressed="true">Semana</button>
+      <button type="button" data-scale="month" class="scale-btn" aria-pressed="false">Mês</button>
+    </div>
+
+    <p class="gantt-hint">
+      Dica: arraste a barra para mover o período, arraste as bordas para alterar
+      início/fim, <strong>Ctrl+roda</strong> para zoom e arraste o fundo para navegar.
+    </p>
+
+    <div class="gantt-legend" id="legend" aria-hidden="true"></div>
+
+    <div class="gantt-scroll-wrapper" id="scroll-wrapper">
+      <div class="gantt-grid">
+        <div class="gantt-sidebar" id="sidebar" aria-label="Árvore de ações">
+          <div class="gantt-sidebar-header">
+            <span>Ação / Responsável</span>
+            <input type="search" id="search-client" class="gantt-search" placeholder="Buscar cliente…"
+              aria-label="Buscar cliente" autocomplete="off">
+          </div>
+          <div class="gantt-sidebar-body" id="sidebar-body"></div>
+        </div>
+
+        <div class="gantt-timeline">
+          <div class="gantt-timeline-header" id="timeline-header"></div>
+          <div class="gantt-timeline-body" id="timeline-body">
+            <div class="gantt-today" id="today-line" hidden aria-hidden="true"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="gantt-tooltip" id="tooltip" role="status" hidden></div>
+
+    <dialog class="gantt-editor" id="editor" aria-label="Editar ação">
+      <form method="dialog" id="editor-form">
+        <h3>Editar ação</h3>
+        <label>Nome<input name="name" type="text" required /></label>
+        <label>Responsável<input name="owner" type="text" /></label>
+        <label>Início<input name="startDate" type="date" required /></label>
+        <label>Fim<input name="endDate" type="date" required /></label>
+        <label>Progresso (%)
+          <input name="progress" type="number" min="0" max="100" step="1" />
+        </label>
+        <label>Categoria
+          <select name="category">
+            <option value="comercial">Comercial</option>
+            <option value="onboarding">Onboarding</option>
+            <option value="suporte">Suporte</option>
+            <option value="group">Grupo</option>
+          </select>
+        </label>
+        <label>Notas<textarea name="notes" rows="2"></textarea></label>
+        <menu>
+          <button value="cancel" type="button" id="editor-cancel">Cancelar</button>
+          <button value="save" id="editor-save">Salvar</button>
+        </menu>
+      </form>
+    </dialog>
+  </section>
+
+  <script src="src/utils/dom.js"></script>
+  <script src="src/config.js"></script>
+  <script src="src/utils/dates.js"></script>
+  <script src="src/state.js"></script>
+  <script src="src/visibility.js"></script>
+  <script src="src/components/legend.js"></script>
+  <script src="src/components/columns.js"></script>
+  <script src="src/components/sidebar.js"></script>
+  <script src="src/components/tooltip.js"></script>
+  <script src="src/components/timeline.js"></script>
+  <script src="src/components/scaleToolbar.js"></script>
+  <script src="src/components/treeActions.js"></script>
+  <script src="src/components/editor.js"></script>
+  <script src="src/components/drag.js"></script>
+  <script src="src/components/navigation.js"></script>
+  <script src="src/render.js"></script>
+  <script src="src/main.js"></script>
+</body>
+
+</html>

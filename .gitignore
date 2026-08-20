@@ -12,3 +12,19 @@ Thumbs.db
 .env
 .env.*
 *.local
+
+# Node / npm
+node_modules/
+package-lock.json
+
+# Playwright
+test-results/
+playwright-report/
+.playwright/
+
+# Export de tasks do gantt (dados locais, fora do repo)
+data/
+
+# Artefatos do Playwright MCP e screenshots locais
+.playwright-mcp/
+tela-principal.png

@@ -71,7 +71,7 @@ const PX_PER_DAY = { day: 36, data: 72, week: 90 / 7, month: 120 / 30 };
 const collapsed = new Set();
 let currentCols = null;
 
-const els = {
+const els = { 
   wrapper: document.getElementById("scroll-wrapper"),
   sidebarBody: document.getElementById("sidebar-body"),
   header: document.getElementById("timeline-header"),
@@ -85,6 +85,7 @@ const els = {
   editor: document.getElementById("editor"),
   editorForm: document.getElementById("editor-form"),
   editorCancel: document.getElementById("editor-cancel"),
+  editorTitle: document.getElementById("editor-title"),
   themeToggle: document.getElementById("theme-toggle"),
   diaAtual: document.getElementById("diaAtual")
 };
@@ -116,17 +117,19 @@ function computeProgress(node) { // Calcula progresso de grupo como média dos f
 }
 function computeEffective(node) { // Calcula datas efetivas de grupo como min/max dos filhos
   if (effective[node.id]) return effective[node.id];
-  const kids = childrenMap[node.id];
+  const kids = childrenMap[node.id];454                                                                                                                                                
   if (!kids || kids.length === 0) { const e = { start: parseDate(node.startDate), end: parseDate(node.endDate), isGroup: false }; effective[node.id] = e; return e; }
   let min = null, max = null;
   kids.forEach(k => { const ke = computeEffective(k); if (!min || ke.start < min) min = ke.start; if (!max || ke.end > max) max = ke.end; });
   const e = { start: min, end: max, isGroup: true }; effective[node.id] = e; return e;
 }
-/* Status de grupo (roll-up) — regra por prioridade:
+/***********
+ Status de grupo (roll-up) — regra por prioridade:
    1) se QUALQUER descendente estiver "atrasado"     -> atrasado
    2) senão, se TODOS estiverem "concluido"          -> concluido
    3) senão (há algo não-concluído e nada atrasado)  -> em_andamento
-   Folha (sem filhos) mantém o próprio status (syncTask). */
+   Folha (sem filhos) mantém o próprio status (syncTask). 
+   ************/
 function computeStatus(node) {
   if (statusMap[node.id] != null) return statusMap[node.id];
   const kids = childrenMap[node.id] || [];
@@ -149,9 +152,9 @@ function computeStatus(node) {
 }
 function getRange() { // Retorna intervalo de datas a exibir na timeline, baseado em tarefas
   const today = new Date(); today.setHours(0, 0, 0, 0);
-  // Janela fixa: 3 meses antes e 3 meses depois de hoje (validar depois) *****************
-  let min = addMonths(today, -3);
-  let max = addMonths(today, 3);
+  // Janela fixa: 2 meses antes e 2 meses depois de hoje ********** (validar depois) *****************
+  let min = addMonths(today, -2);
+  let max = addMonths(today, 2);
   // Não corta tarefas que fujam desse intervalo
   tasks.forEach(t => {
     if (t.startDate && t.endDate) {

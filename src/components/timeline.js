@@ -17,7 +17,10 @@ function renderTimeline(visible, cols) {
     const w = (dayDiff(effEnd, effStart) + 1) * cols.pxPerDay;
 
     const bar = document.createElement("div");
-    bar.className = "bar" + (isGroup ? " summary" : "");
+    let cls = "bar" + (isGroup ? " summary" : "");
+    if (w < 150) cls += " bar--no-label";
+    if (w < 72) cls += " bar--mini";
+    bar.className = cls;
     bar.style.left = left + "px";
     bar.style.width = Math.max(w, 12) + "px";
     if (!isGroup) bar.style.background = categoryColors[node.category];
@@ -42,7 +45,7 @@ function renderTimeline(visible, cols) {
     bar.innerHTML = `<span class="bar-fill" style="width:${pct}%"></span>` +
                     `<span class="bar-status-ico">${statusIndicators[statusMap[node.id] || "pendente"].icon}</span>` +
                     `<span class="bar-label">${escapeHtml(node.name)}</span>` +
-                    `<span class="bar-pct">${pct}%</span>${av}` + handles;
+                    `<span class="bar-tail"><span class="bar-pct">${pct}%</span>${av}</span>` + handles;
 
     bar.addEventListener("mouseenter", () => showTooltip(node, eff, isGroup, bar));
     bar.addEventListener("mouseleave", hideTooltip);

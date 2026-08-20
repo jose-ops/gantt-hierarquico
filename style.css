@@ -650,7 +650,6 @@ body {
 }
 
 .bar-pct {
-  margin-left: auto;
   padding-left: 0.4rem;
   font-weight: 700;
   font-size: 0.72rem;
@@ -661,7 +660,7 @@ body {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  margin-left: 0.35rem;
+  margin-left: 0;
   flex: 0 0 auto;
   display: inline-flex;
   align-items: center;
@@ -682,6 +681,43 @@ body {
 
 .bar .bar-label {
   pointer-events: none;
+}
+
+/* cauda (percentual + avatar) — fica à direita dentro da barra */
+.bar-tail {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-left: auto;
+}
+
+/* barra estreita: some o nome (não cabe) */
+.bar--no-label .bar-label {
+  display: none;
+}
+
+/* barra muito estreita: some nome+ícone e "estoura" a cauda p/ fora (lado direito) */
+.bar--mini {
+  overflow: visible;
+}
+.bar--mini .bar-status-ico,
+.bar--mini .bar-label {
+  display: none;
+}
+.bar--mini .bar-tail {
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-left: 6px;
+  z-index: 6;
+}
+.bar--mini .bar-pct {
+  color: var(--text);
+  margin-left: 0;
+}
+.bar--mini .bar-avatar {
+  margin-left: 0;
 }
 
 /* Alças de redimensionamento (início/fim) */

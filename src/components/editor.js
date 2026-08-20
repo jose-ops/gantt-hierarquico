@@ -34,6 +34,9 @@ function openEditor(t, parent) {
     f.progress.value = 0; f.notes.value = "";
     setEditorRequired(!isClient);
   }
+  const title = t ? "Editar ação" : (parent === null ? "Adicionar cliente" : "Adicionar ação");
+  els.editorTitle.textContent = title;
+  els.editor.setAttribute("aria-label", title);
   if (typeof els.editor.showModal === "function") els.editor.showModal();
   else els.editor.setAttribute("open", "");
 }
@@ -76,6 +79,12 @@ function initEditor(rerender) {
   els.editorCancel.addEventListener("click", () => {
     if (typeof els.editor.close === "function") els.editor.close();
     else els.editor.removeAttribute("open");
+  });
+  els.editor.addEventListener("click", (e) => {
+    if (e.target === els.editor) {
+      if (typeof els.editor.close === "function") els.editor.close();
+      else els.editor.removeAttribute("open");
+    }
   });
   els.body.addEventListener("dblclick", (e) => {
     const bar = e.target.closest(".bar");

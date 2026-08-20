@@ -1,0 +1,20 @@
+{
+  "name": "hierarquico",
+  "version": "1.0.0",
+  "description": "gantt-hierarquico",
+  "type": "module",
+  "scripts": {
+    "test": "playwright test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jose-ops/gantt-hierarquico.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/mcp": "^0.0.79",
+    "@playwright/test": "^1.62.1"
+  }
+}
